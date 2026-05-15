@@ -17,6 +17,9 @@ RUN lein uberjar
 # Expõe a porta 3000 (pode ser sobrescrita pela variável PORT)
 EXPOSE 3000
 
+# Lista os arquivos gerados para debug (temporário)
+RUN ls -la target/uberjar/
+
 # Comando para executar a aplicação
-# Ajuste o nome do jar conforme o nome do seu projeto no project.clj
-CMD ["java", "-jar", "target/uberjar/calculador-trastes-standalone.jar"]
+# Usa wildcard para pegar o arquivo *-standalone.jar
+CMD java -jar target/uberjar/*-standalone.jar
