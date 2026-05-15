@@ -1,44 +1,90 @@
-# calculador-trastes
+# API Calculador de Trastes
 
-FIXME: description
+API em Clojure para calcular posições de trastes de instrumentos musicais.
 
-## Installation
+## 🚀 Deploy no Render
 
-Download from https://example.com/FIXME.
+### Pré-requisitos
+- Conta no GitHub
+- Conta no Render (gratuita)
 
-## Usage
+### Passos
 
-FIXME: explanation
+1. **Adicione os arquivos ao repositório:**
+   ```bash
+   git add Dockerfile .dockerignore project.clj render.yaml
+   git commit -m "Adiciona configuração para deploy no Render"
+   git push origin main
+   ```
 
-    $ java -jar calculador-trastes-0.1.0-standalone.jar [args]
+2. **Configure no Render:**
+   - Acesse https://render.com
+   - Clique em "New +" → "Web Service"
+   - Conecte seu repositório do GitHub
+   - Selecione o repositório
+   - O Render detectará automaticamente o `render.yaml`
+   - Clique em "Create Web Service"
 
-## Options
+3. **Aguarde o deploy:**
+   - O build leva cerca de 3-5 minutos
+   - Você receberá uma URL tipo: `https://calculador-trastes-api.onrender.com`
 
-FIXME: listing of options this app accepts.
+## 📡 Endpoints
 
-## Examples
+### GET /
+Retorna informações sobre a API
 
-...
+### GET /calcular
+Calcula as posições dos trastes
 
-### Bugs
+**Parâmetros:**
+- `escala` (obrigatório): Escala do instrumento em milímetros (ex: 650)
+- `trastes` (opcional): Número de trastes (padrão: 22)
 
-...
+**Exemplo:**
+```
+GET /calcular?escala=650&trastes=24
+```
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+**Resposta:**
+```json
+{
+  "escala_informada": 650.0,
+  "unidade": "mm",
+  "mapa_de_trastes": [
+    {
+      "traste": 1,
+      "distancia_pestana": 36.48,
+      "tamanho_traste": 36.48,
+      "distancia_ponte": 613.52
+    },
+    ...
+  ]
+}
+```
 
-## License
+## 🧪 Testar localmente com Docker
 
-Copyright © 2026 FIXME
+```bash
+# Build
+docker build -t calculador-trastes .
 
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-https://www.eclipse.org/legal/epl-2.0.
+# Run
+docker run -p 3000:3000 calculador-trastes
 
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+# Teste
+curl "http://localhost:3000/calcular?escala=650&trastes=22"
+```
+
+## 🛠️ Desenvolvimento local
+
+```bash
+# Instalar dependências
+lein deps
+
+# Executar
+lein run
+
+# Ou REPL
+lein repl
+```

@@ -28,16 +28,25 @@
 
 ;; 2. Definição das Rotas
 (defroutes app-routes
+  (GET "/" []
+    {:status 200
+     :body {:message "API Calculador de Trastes"
+            :endpoint "/calcular?escala=650&trastes=22"}})
   (GET "/calcular" [escala trastes]
-    (let [e (Double/parseDouble escala)
-          t (Integer/parseInt (or trastes "22"))]
-      {:status 200
-       :body {:escala_informada e
-              :unidade "mm"
-              :mapa_de_trastes (calcular-trastes e t)}}))
-  (route/not-found {:error "Rota não encontrada"}))
+    (try
+      (let [e (Double/parseDouble escala)
+            t (Integer/parseInt (or trastes "22"))]
+        {:status 200
+         :body {:escala_informada e
+                :unidade "mm"
+                :mapa_de_trastes (calcular-trastes e t)}})
+      (catch Exception ex
+        {:status 400
+         :body {:error "Parâmetros inválidos. Use: /calcular?escala=650&trastes=22"}})))
+  (route/not-found {:status 404
+                    :body {:error "Rota não encontrada"}}))
 
-;; 3. Definição do APP (O "app" precisa vir ANTES do -main)
+;; 3. Definição do APP
 (def app
   (-> app-routes
       (wrap-json-response)
@@ -45,7 +54,8 @@
 
 ;; 4. Função de Entrada
 (defn -main [& args]
-  ;; O servidor vai injetar a porta na variável de ambiente "PORT"
+  ;; Render injeta a porta na variável PORT
   (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
-    (println "Servidor de Luthieria iniciado na porta" port)
+    (println (str "🎸 Servidor de Luthieria iniciado na porta " port))
+    (println (str "📍 Acesse: http://0.0.0.0:" port "/calcular?escala=650&trastes=22"))
     (run-server app {:port port})))

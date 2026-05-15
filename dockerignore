@@ -1,0 +1,11 @@
+target/
+.git/
+.gitignore
+*.md
+README.md
+.DS_Store
+*.log
+.lein-*
+.nrepl-port
+pom.xml
+pom.xml.asc
