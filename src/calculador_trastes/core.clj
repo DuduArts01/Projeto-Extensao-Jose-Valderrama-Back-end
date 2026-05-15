@@ -45,6 +45,7 @@
 
 ;; 4. Função de Entrada
 (defn -main [& args]
-  (let [port 3000]
+  ;; O servidor vai injetar a porta na variável de ambiente "PORT"
+  (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
     (println "Servidor de Luthieria iniciado na porta" port)
     (run-server app {:port port})))
