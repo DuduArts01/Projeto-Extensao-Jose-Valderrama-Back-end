@@ -3,6 +3,7 @@
             [compojure.route :as route]
             [ring.middleware.json :refer [wrap-json-response]]
             [ring.middleware.cors :refer [wrap-cors]]
+            [ring.middleware.params :refer [wrap-params]]
             [org.httpkit.server :refer [run-server]])
   (:gen-class))
 
@@ -32,9 +33,12 @@
     {:status 200
      :body {:message "API Calculador de Trastes"
             :endpoint "/calcular?escala=650&trastes=22"}})
-  (GET "/calcular" [escala trastes]
+  (GET "/calcular" req ;; Alterado para receber o mapa do request completo
     (try
-      (let [e (Double/parseDouble escala)
+      (let [params (:query-params req) ;; Extrai os parâmetros injetados pelo wrap-params
+            escala (get params "escala")
+            trastes (get params "trastes")
+            e (Double/parseDouble escala)
             t (Integer/parseInt (or trastes "22"))]
         {:status 200
          :body {:escala_informada e
@@ -46,13 +50,13 @@
   (route/not-found {:status 404
                     :body {:error "Rota não encontrada"}}))
 
-;; 3. Definição do APP com liberação de CORS (Corrigido)
+;; 3. Definição do APP com liberação de CORS e Params
 (def app
   (-> app-routes
       (wrap-json-response)
-      ;; Corrigida a sintaxe da expressão regular para o padrão correto do Clojure
       (wrap-cors :access-control-allow-origin [#"http://localhost:5173"]
-                 :access-control-allow-methods [:get])))
+                 :access-control-allow-methods [:get])
+      (wrap-params))) ;; <-- Adicionado no pipeline do Ring para processar a Query String
 
 ;; 4. Função de Entrada
 (defn -main [& args]
