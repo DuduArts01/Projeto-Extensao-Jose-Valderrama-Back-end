@@ -2,7 +2,7 @@
   (:require [compojure.core :refer [defroutes GET]]
             [compojure.route :as route]
             [ring.middleware.json :refer [wrap-json-response]]
-            [ring.middleware.cors :refer [wrap-cors]] ;; <-- middleware de CORS
+            [ring.middleware.cors :refer [wrap-cors]]
             [org.httpkit.server :refer [run-server]])
   (:gen-class))
 
@@ -30,8 +30,8 @@
 (defroutes app-routes
   (GET "/" []
     {:status 200
-      :body {:message "API Calculador de Trastes"
-             :endpoint "/calcular?escala=650&trastes=22"}})
+     :body {:message "API Calculador de Trastes"
+            :endpoint "/calcular?escala=650&trastes=22"}})
   (GET "/calcular" [escala trastes]
     (try
       (let [e (Double/parseDouble escala)
@@ -46,12 +46,12 @@
   (route/not-found {:status 404
                     :body {:error "Rota não encontrada"}}))
 
-;; 3. Definição do APP com liberação de CORS
+;; 3. Definição do APP com liberação de CORS (Corrigido)
 (def app
   (-> app-routes
       (wrap-json-response)
-      ;; 2. Configurado para aceitar requisições do seu servidor local do Vite
-      (wrap-cors :access-control-allow-origin [#规律"http://localhost:5173"]
+      ;; Corrigida a sintaxe da expressão regular para o padrão correto do Clojure
+      (wrap-cors :access-control-allow-origin [#"http://localhost:5173"]
                  :access-control-allow-methods [:get])))
 
 ;; 4. Função de Entrada
