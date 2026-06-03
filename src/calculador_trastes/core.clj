@@ -54,9 +54,10 @@
 (def app
   (-> app-routes
       (wrap-json-response)
-      (wrap-cors :access-control-allow-origin [#"http://localhost:5173"]
+      (wrap-cors :access-control-allow-origin [#"http://localhost:5173"
+                                               #"https://.*\.vercel\.app"]
                  :access-control-allow-methods [:get])
-      (wrap-params))) ;; <-- Adicionado no pipeline do Ring para processar a Query String
+      (wrap-params)))
 
 ;; 4. Função de Entrada
 (defn -main [& args]
