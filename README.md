@@ -445,7 +445,7 @@ docker-compose up --build
 |---------------------|-----------------------------|
 | Orientador          | Prof. Aparecido V. de Freitas |
 | Empresa Parceira    | José Valderrama Luthier     |
-| Desenvolvedores     | [Componentes do Grupo]      |
+| Desenvolvedores     | Eduardo de Medeiros Siqueira e Pedro Oikawa M. Oliveira |
 
 > Projeto de Extensão — Programação Funcional com Clojure  
 > Instituto Mauá de Tecnologia — 2026
